@@ -26,6 +26,9 @@ The starter is empty so we can practice a little.
  */
 
 /*
+
+// ------------ 1ST : PREPAPRE SCENE : CREATE THREE MESH -----------------------
+
 Prepare OUR SCENE ->
 
 Create 3 Meshes composed of 3 Different Geometries (a sphere, a plane and a torus)
@@ -113,10 +116,28 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 /**
  * Animate
  */
+
 const clock = new THREE.Clock();
 
 const tick = () => {
   const elapsedTime = clock.getElapsedTime();
+
+  /*
+  // ------------ 2ND : CREATING ROTATION ANIMATION -----------------------
+
+   // UPDATE THE OBJECTS
+    ROTATE THE OBJECTS IN THE TICK FUNCTION 
+  */
+
+  sphere.rotation.y = 0.1 * elapsedTime;
+  plane.rotation.y = 0.1 * elapsedTime;
+  torus.rotation.y = 0.1 * elapsedTime;
+
+  sphere.rotation.x = 0.15 * elapsedTime;
+  plane.rotation.x = 0.15 * elapsedTime;
+  torus.rotation.x = 0.15 * elapsedTime;
+
+  // YOU dont need to rotate on z axis, because rotating in and x and y is already showing all possible rotation.
 
   // Update controls
   controls.update();
