@@ -12,6 +12,31 @@ const canvas = document.querySelector("canvas.webgl");
 const scene = new THREE.Scene();
 
 /*
+ * TEXTURES
+ *
+ */
+
+/* ------------- 3RD : LOAD THE TEXTURE ---------------- */
+
+const textureLoader = new THREE.TextureLoader();
+const doorColorTexture = textureLoader.load("/textures/door/color.jpg");
+
+// now update the mesh material so we can see the texture : "const material = new THREE.MeshBasicMaterial({ map: colorTexture });"
+
+// Loading more textures
+const doorAlphaTexture = textureLoader.load("/textures/door/alpha.jpg");
+const doorHeightTexture = textureLoader.load("/textures/door/height.jpg");
+const doorNormalTexture = textureLoader.load("/textures/door/normal.jpg");
+const doorAmbientOcclusionTexture = textureLoader.load(
+  "/textures/door/ambientOcclusion.jpg"
+);
+const doorMetalnessTexture = textureLoader.load("/textures/door/metalness.jpg");
+const doorRoughnessTexture = textureLoader.load("/textures/door/roughness.jpg");
+
+// Matcap
+const matcapTexture = textureLoader.load("/textures/matcaps/1.png");
+
+/*
 Materials are used to put a color on each visible pixel of the geometries, The algorithms are written in programs called shaders, We dont need to write shaders and we can use built in materials.
 
 SETUP ->
@@ -27,6 +52,9 @@ The starter is empty so we can practice a little.
 
 /*
 
+
+
+
 // ------------ 1ST : PREPAPRE SCENE : CREATE THREE MESH -----------------------
 
 Prepare OUR SCENE ->
@@ -37,7 +65,10 @@ Use the same MeshBasicMaterial on all 3.
 
 // If you dont give any color it the default will be white.
 // const material = new THREE.MeshBasicMaterial();
-const material = new THREE.MeshBasicMaterial({ color: "pink" });
+const material = new THREE.MeshBasicMaterial({
+  color: "pink",
+  map: doorColorTexture,
+});
 
 // 1st mesh
 const sphere = new THREE.Mesh(
