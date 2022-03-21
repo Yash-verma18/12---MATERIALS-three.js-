@@ -214,9 +214,17 @@ scene.add(pointLight);
 /*THIS MESH LAMBERT MATERIAL WOULD NOT ABLE TO SEE WITHOUT THE LIGHTS, IT JUST REACT TO LIGHT
 It have new properties related to lights but we will see those later with a more adequate material. Its performant but we see strange patterns on the geometry.
 */
-const material = new THREE.MeshLambertMaterial();
+// const material = new THREE.MeshLambertMaterial();
 
 // -------------------------------------------------------------------------
+// ---------------------------------MESH PHONG MATERIAL------------------------------------------
+/* Same results, but strange pattern is gone, Its similar to mesh lambert material, but the strange patterns are less visible, and you can also see the light relection
+
+We can control light reflection with 'shininess' and the color of this reflection with 'specular'
+*/
+const material = new THREE.MeshPhongMaterial();
+material.shininess = 10000;
+material.specular = new THREE.Color("red");
 
 // 1st mesh
 const sphere = new THREE.Mesh(
