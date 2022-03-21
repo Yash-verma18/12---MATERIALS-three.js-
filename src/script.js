@@ -63,12 +63,74 @@ Create 3 Meshes composed of 3 Different Geometries (a sphere, a plane and a toru
 Use the same MeshBasicMaterial on all 3.
 */
 
+/*
+
+Until now, we used the MeshBasicMaterial which applies a uniform color or a texture on our geometry. Search for material on the Three js documentation. We are going to test them all.
+
+1. MeshBasicMaterial : The most basic material but we did not cover all its properties. Most of the materials properties can be set in two ways, We will use the second method.
+
+*/
+
 // If you dont give any color it the default will be white.
 // const material = new THREE.MeshBasicMaterial();
-const material = new THREE.MeshBasicMaterial({
-  color: "pink",
-  map: doorColorTexture,
-});
+
+const material = new THREE.MeshBasicMaterial();
+// one way of giving texture :
+// const material = new THREE.MeshBasicMaterial({
+//   map: doorColorTexture,
+// });
+
+// 2nd way of giving texture, Same results.
+// material.map = doorColorTexture;
+
+/*
+Color will apply a uniform color on the surface of the geometry, Once Instatiated, The color property becomes a color.
+
+// const material = new THREE.MeshBasicMaterial({
+//   color: 'red',
+// });
+
+// This wont work :- 
+material.color = 'red';
+
+
+*/
+// So to change a color, we have to use set method.
+// material.color.set("red");
+
+// Or we have to provide the Color class instantiate.
+// material.color.set("red");
+
+// We can combine color and map, We get combine results :
+// material.map = doorColorTexture;
+// material.color.set(0x00ff00);
+
+// Wireframe will show the triangels that compose the geometry. All the subdivision are visible
+// material.wireframe = true;
+
+// Opacity controls the general opacity, We need to set 'transparent = true' to use opacity feature.
+material.transparent = true;
+// material.opacity = 0.5;
+
+// You can enable texture to see the Door effect.
+// AlphaMap controls transparency with a texture, so We need to set 'transparent = true' to use alphamap feature.
+material.map = doorColorTexture;
+material.alphaMap = doorAlphaTexture;
+// As you can see the door is visible and all the white color is not, so we have to use the map and alpha map feature.
+
+/*
+Side lets you decide which side of a face is visible
+* THREE.FrontSide (default)
+* THREE.BackSide
+* THREE.DoubleSide
+*/
+
+// material.side = THREE.FrontSide;
+// material.side = THREE.BackSide;
+// Try not to use double Size cause its more calculation for the GPU and the computer.
+material.side = THREE.DoubleSide;
+
+// Some of these propeties like wireframe or opacity can be used with other types of materials.
 
 // 1st mesh
 const sphere = new THREE.Mesh(
