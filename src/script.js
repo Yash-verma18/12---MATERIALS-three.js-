@@ -188,6 +188,29 @@ This can be used for fogs, snowfall.
 const material = new THREE.MeshDepthMaterial();
 
 // ---------------------------------------------------------------------------
+// ---------------------------------ADDING A FEW LIGHTS------------------------------------------
+
+/*
+
+The next material that we are gonna use needs lights. So we will use lights here.
+Lights does not work on meshdepthmaterial.
+*/
+
+/*
+ * Lights
+ */
+// first parameter is white and 2nd is intensity
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+scene.add(ambientLight);
+
+const pointLight = new THREE.PointLight(0xffffff, 0.5);
+pointLight.position.x = 2;
+pointLight.position.y = 3;
+pointLight.position.z = 4;
+
+scene.add(pointLight);
+
+// -------------------------------------------------------------------------
 
 // 1st mesh
 const sphere = new THREE.Mesh(
