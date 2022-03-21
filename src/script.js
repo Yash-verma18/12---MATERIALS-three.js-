@@ -63,6 +63,8 @@ Create 3 Meshes composed of 3 Different Geometries (a sphere, a plane and a toru
 Use the same MeshBasicMaterial on all 3.
 */
 
+// ---------------------------MESH BASIC MATERIAL---------------------------
+
 /*
 
 Until now, we used the MeshBasicMaterial which applies a uniform color or a texture on our geometry. Search for material on the Three js documentation. We are going to test them all.
@@ -74,7 +76,7 @@ Until now, we used the MeshBasicMaterial which applies a uniform color or a text
 // If you dont give any color it the default will be white.
 // const material = new THREE.MeshBasicMaterial();
 
-const material = new THREE.MeshBasicMaterial();
+// const material = new THREE.MeshBasicMaterial();
 // one way of giving texture :
 // const material = new THREE.MeshBasicMaterial({
 //   map: doorColorTexture,
@@ -109,13 +111,13 @@ material.color = 'red';
 // material.wireframe = true;
 
 // Opacity controls the general opacity, We need to set 'transparent = true' to use opacity feature.
-material.transparent = true;
+// material.transparent = true;
 // material.opacity = 0.5;
 
 // You can enable texture to see the Door effect.
 // AlphaMap controls transparency with a texture, so We need to set 'transparent = true' to use alphamap feature.
-material.map = doorColorTexture;
-material.alphaMap = doorAlphaTexture;
+// material.map = doorColorTexture;
+// material.alphaMap = doorAlphaTexture;
 // As you can see the door is visible and all the white color is not, so we have to use the map and alpha map feature.
 
 /*
@@ -128,9 +130,28 @@ Side lets you decide which side of a face is visible
 // material.side = THREE.FrontSide;
 // material.side = THREE.BackSide;
 // Try not to use double Size cause its more calculation for the GPU and the computer.
-material.side = THREE.DoubleSide;
+// material.side = THREE.DoubleSide;
 
 // Some of these propeties like wireframe or opacity can be used with other types of materials.
+
+// ---------------------------MESH NORMAL MATERIAL---------------------------
+
+/*
+normals are information that contains the direction of the outside of the face.
+
+normals can be use for lighting, reflection, refraction etc.
+MeshNormalMaterial shares common properties with MeshBasicMaterial like wireframe, transparent, opacity, side. But there is also a flatshading property
+
+Flatshading property will flatten the faces, meaning that the normals wont be interpolated between the vertices.
+
+MeshNormalMaterial is usually used to debug normals, but the color looks so great that you can use it for your projects.
+*/
+
+// IT DOES LOOK VERY COOL
+const material = new THREE.MeshNormalMaterial();
+// material.wireframe = true;
+// THIS LOOKS VERY COOL. ITS FLAT, WE CAN SEE THE FACES
+material.flatShading = true;
 
 // 1st mesh
 const sphere = new THREE.Mesh(
