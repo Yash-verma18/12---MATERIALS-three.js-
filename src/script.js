@@ -148,10 +148,31 @@ MeshNormalMaterial is usually used to debug normals, but the color looks so grea
 */
 
 // IT DOES LOOK VERY COOL
-const material = new THREE.MeshNormalMaterial();
+// const material = new THREE.MeshNormalMaterial();
 // material.wireframe = true;
 // THIS LOOKS VERY COOL. ITS FLAT, WE CAN SEE THE FACES
-material.flatShading = true;
+// material.flatShading = true;
+
+// ----------------------------------------------------------------------------------
+
+// ---------------------------MESH MAT CAP MATERIAL---------------------------
+
+/*
+
+MESHMATCAPMATERIAL : will display a color by using the normals as a reference to pick the right color on a texture that looks like a sphere.
+
+To find the matcaps textures: 'https://github.com/nidorx/matcaps'
+You can also create your own with a 3D software, Or you can create it in a 2D software like photoshop.
+
+*/
+
+const material = new THREE.MeshMatcapMaterial();
+
+// Set the matcap texture with the matcap property
+// We get an illusion that the objects are being illuminated.
+// This material is faking light without the light in the scene.
+
+material.matcap = matcapTexture;
 
 // 1st mesh
 const sphere = new THREE.Mesh(
