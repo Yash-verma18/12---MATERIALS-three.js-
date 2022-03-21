@@ -36,6 +36,9 @@ const doorRoughnessTexture = textureLoader.load("/textures/door/roughness.jpg");
 // Matcap
 const matcapTexture = textureLoader.load("/textures/matcaps/1.png");
 
+// Gradient
+const gradientTexture = textureLoader.load("/textures/gradients/3.jpg");
+
 /*
 Materials are used to put a color on each visible pixel of the geometries, The algorithms are written in programs called shaders, We dont need to write shaders and we can use built in materials.
 
@@ -222,9 +225,35 @@ It have new properties related to lights but we will see those later with a more
 
 We can control light reflection with 'shininess' and the color of this reflection with 'specular'
 */
-const material = new THREE.MeshPhongMaterial();
-material.shininess = 10000;
-material.specular = new THREE.Color("red");
+// const material = new THREE.MeshPhongMaterial();
+// material.shininess = 10000;
+// material.specular = new THREE.Color("red");
+
+// -------------------------------------------------------------------------
+// ---------------------------------MESH TOON MATERIAL------------------------------------------
+/*
+Its similar to meshlambermaterial but with a cartoonish.
+To add a more steps to the coloration, you can use the gradientMap property and use the gradientTexture
+
+If you want cartoonish, use it.
+
+*/
+
+const material = new THREE.MeshToonMaterial();
+material.gradientMap = gradientTexture;
+
+// We see a gradient instead of a clear separation because the gradient is small and the magfilter tries to fix it with the mipmapping. Set the minFilter and magFilter to Three.nearestFilter, We can also deactivate the mipmapping. 'gradie'
+
+gradientTexture.minFilter = THREE.NearestFilter;
+gradientTexture.magFilter = THREE.NearestFilter;
+
+/*As we are using nearest filter so deactivate the generate mip maps, Its always better to deactivate them if we can. */
+gradientTexture.generateMipmaps = false;
+
+// try more gradient we have in gradients folder.
+// const gradientTexture = textureLoader.load("/textures/gradients/5.jpg");
+
+// -------------------------------------------------------------------------
 
 // 1st mesh
 const sphere = new THREE.Mesh(
