@@ -166,13 +166,28 @@ You can also create your own with a 3D software, Or you can create it in a 2D so
 
 */
 
-const material = new THREE.MeshMatcapMaterial();
+// const material = new THREE.MeshMatcapMaterial();
 
 // Set the matcap texture with the matcap property
 // We get an illusion that the objects are being illuminated.
 // This material is faking light without the light in the scene.
 
-material.matcap = matcapTexture;
+// material.matcap = matcapTexture;
+
+// ----------------------------------------------------------
+
+// ---------------------------MESH DEPTH MATERIAL---------------------------
+
+/*
+It will simply color the geometry in 'white' if its close to the 'near', And in 'black' if its close to the 'far' value of the camera.
+As you zoom to the object, the objects gets visible. VICE VERSA (NEAR = WHITE, FAR = BLACK)
+
+This can be used for fogs, snowfall. 
+*/
+
+const material = new THREE.MeshDepthMaterial();
+
+// ---------------------------------------------------------------------------
 
 // 1st mesh
 const sphere = new THREE.Mesh(
