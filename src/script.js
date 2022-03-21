@@ -185,7 +185,7 @@ As you zoom to the object, the objects gets visible. VICE VERSA (NEAR = WHITE, F
 This can be used for fogs, snowfall. 
 */
 
-const material = new THREE.MeshDepthMaterial();
+// const material = new THREE.MeshDepthMaterial();
 
 // ---------------------------------------------------------------------------
 // ---------------------------------ADDING A FEW LIGHTS------------------------------------------
@@ -209,6 +209,12 @@ pointLight.position.y = 3;
 pointLight.position.z = 4;
 
 scene.add(pointLight);
+
+// ---------------------------------MESH LAMBERT MATERIAL------------------------------------------
+/*THIS MESH LAMBERT MATERIAL WOULD NOT ABLE TO SEE WITHOUT THE LIGHTS, IT JUST REACT TO LIGHT
+It have new properties related to lights but we will see those later with a more adequate material. Its performant but we see strange patterns on the geometry.
+*/
+const material = new THREE.MeshLambertMaterial();
 
 // -------------------------------------------------------------------------
 
