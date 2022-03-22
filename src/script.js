@@ -45,6 +45,19 @@ const matcapTexture = textureLoader.load("/textures/matcaps/1.png");
 // Gradient
 const gradientTexture = textureLoader.load("/textures/gradients/3.jpg");
 
+// CubeTextureLoader for Enviorement
+const cubeTextureLoader = new THREE.CubeTextureLoader();
+
+// Array of 6 paths.
+const enviorementTexture = cubeTextureLoader.load([
+  "/textures/environmentMaps/3/px.jpg",
+  "/textures/environmentMaps/3/nx.jpg",
+  "/textures/environmentMaps/3/py.jpg",
+  "/textures/environmentMaps/3/ny.jpg",
+  "/textures/environmentMaps/3/pz.jpg",
+  "/textures/environmentMaps/3/nz.jpg",
+]);
+
 /*
 Materials are used to put a color on each visible pixel of the geometries, The algorithms are written in programs called shaders, We dont need to write shaders and we can use built in materials.
 
@@ -262,7 +275,7 @@ If you want cartoonish, use it.
 // -------------------------------------------------------------------------
 // ---------------------------------MESH STANDARD MATERIAL------------------------------------------
 
-const material = new THREE.MeshStandardMaterial();
+// const material = new THREE.MeshStandardMaterial();
 
 /*
 It uses physically based rendering principles (PBR) Like MeshLambertMaterial and MeshPhongMaterial, It supports lights but with a more realistic algorithm and better parameters like roughness and metalness.
@@ -271,23 +284,23 @@ It uses physically based rendering principles (PBR) Like MeshLambertMaterial and
 // We can change the roughness and the metalness.
 // material.metalness = 0.45;
 // material.roughness = 0.65;
-material.side = THREE.DoubleSide;
+// material.side = THREE.DoubleSide;
 
 // map allows you apply a texture
-material.map = doorColorTexture;
+// material.map = doorColorTexture;
 
 // aoMap ("ambient occlusion map") will add shadows where the texture is dark. We must add a second set of UV named uv2 to use this feature.
-material.aoMap = doorAmbientOcclusionTexture;
+// material.aoMap = doorAmbientOcclusionTexture;
 
 // Add the aomap with the doorAmbientOcculsionTexture texture and control the instensity with aoMapIntensity
-material.aoMapIntensity = 1;
-gui.add(material, "aoMapIntensity").min(0).max(5).step(0.0001);
+// material.aoMapIntensity = 1;
+// gui.add(material, "aoMapIntensity").min(0).max(5).step(0.0001);
 
 // DisplacementMap will move the vertices to create relief
 // height map and displacement map are the same.
-material.displacementMap = doorHeightTexture;
-material.displacementScale = 0.09;
-gui.add(material, "displacementScale").min(0).max(1).step(0.0001);
+// material.displacementMap = doorHeightTexture;
+// material.displacementScale = 0.09;
+// gui.add(material, "displacementScale").min(0).max(1).step(0.0001);
 
 /*
 It should look terrible because it lacks vertices and the displacement is way too strong.
@@ -296,34 +309,74 @@ It should look terrible because it lacks vertices and the displacement is way to
 // Instead of specifying uniform, matalness and roughness for the whole geometry, we can use metalnessMap and roughnessMap
 // When its black it goes up and when white it goes down.
 
-material.metalnessMap = doorMetalnessTexture;
-material.roughnessMap = doorRoughnessTexture;
+// material.metalnessMap = doorMetalnessTexture;
+// material.roughnessMap = doorRoughnessTexture;
 
 // The reflection looks weird because the metalness and roughness properties still affect each map respectively, comment metalness and roughness or use their original values.
-material.metalness = 0;
-material.roughness = 1;
+// material.metalness = 0;
+// material.roughness = 1;
 
 // material.wireframe = true;
 
 // gui.add(material, "metalness", 0.1, 1);
 // gui.add(material, "roughness", 0.1, 1);
-gui.add(material, "metalness").min(0).max(1).step(0.0001);
-gui.add(material, "roughness").min(0).max(1).step(0.0001);
+// gui.add(material, "metalness").min(0).max(1).step(0.0001);
+// gui.add(material, "roughness").min(0).max(1).step(0.0001);
 
 // normalMap will fake the normals orientation and add details on the surface regardless of the subdivision, It will give door so much details.
 
-material.normalMap = doorNormalTexture;
+// material.normalMap = doorNormalTexture;
 
 // We can change the normal intensity with the normalScale property
-material.normalScale.set(0.9, 0.9);
+// material.normalScale.set(0.9, 0.9);
 
 // Finally we can control the alpha using the alphaMap Property, Dont forget transparent = true
 
 //NOW THE DOOR IS VISIBLE AND ALL THE EXTRA PLANE IS NOT VISIBLE. WE ARE SEEING VERY REALISTIC DOOR.
-material.transparent = true;
-material.alphaMap = doorAlphaTexture;
+// material.transparent = true;
+// material.alphaMap = doorAlphaTexture;
 
 // --------------------XXXXXXXXXXXXXXXXXXXXXX-MESH STANDARD MATERIAL COMPLETED -XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX------------------------------
+
+// -----------------------------------------------------Mesh Physical Material-----------------------------------------------------
+
+// Mesh Physical Material is the same as MeshStandardMaterial but with support of a clear coat effect
+
+// -----------------------------------------------------Points Material-----------------------------------------------------
+// You can use points material with particles.
+
+// --Shader Materials and  RawShaderMaterials-- "can both be used to create your own materials".
+
+// -------------------------------------------------ENVIORONMENT MAP-------------------------------------------------
+// The environment map is an image of what is surrounding the scene, It can be used for reflection or refraction but also for general lightning enviorment maps are supported by multiple materials but we are going to use "MeshStandardMaterial"
+
+// Set a nice looking mesh standard material
+const material = new THREE.MeshStandardMaterial();
+
+material.metalness = 1;
+material.roughness = 0;
+
+gui.add(material, "metalness").min(0).max(1).step(0.0001);
+gui.add(material, "roughness").min(0).max(1).step(0.0001);
+
+// Threejs only supports cube enviorement maps, you can find multiple enviorement maps in the /static/textures/enviorementMap/ folder
+// To load a cube texture, we must use the "CubeTextureLoader" instead of the "TextureLoader"
+
+// Use the enviormentMapTexture in the envMap property of the material.
+material.envMap = enviorementTexture;
+
+// I AM WITNESSING NICE REFLECTION OF ENVIOREMENT ON THE MATERIALS.
+
+// YOU CAN TWEAK THE Metalness and roughness for different results and test other enviorement maps.
+
+// WHERE TO FIN ENVIRONMENT MAPS
+// YOU CAN DO SIMPLE SEARCHES ON THE WEB ALWAYS MAKE SURE YOU HAVE THE RIGHT TO USE THEM.
+// "HDRIHaven" website.
+// Hundreds of awesome HDRIs (High Dynamic Range Imaging) not a cube map.
+
+// TO CONVERT HDRIs (enviorement map downloaded from web) to CUBE MAPS. USE THIS ONLINE TOOL. : https.//matheowis.github.io/HDRI-to-CubeMap/
+
+// --------------------------------------------------------------------------------------------------------------------------------
 
 // -------------------------------------------------------------------------
 // 1st mesh
