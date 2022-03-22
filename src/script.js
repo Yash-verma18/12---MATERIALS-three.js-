@@ -310,6 +310,21 @@ material.roughness = 1;
 gui.add(material, "metalness").min(0).max(1).step(0.0001);
 gui.add(material, "roughness").min(0).max(1).step(0.0001);
 
+// normalMap will fake the normals orientation and add details on the surface regardless of the subdivision, It will give door so much details.
+
+material.normalMap = doorNormalTexture;
+
+// We can change the normal intensity with the normalScale property
+material.normalScale.set(0.9, 0.9);
+
+// Finally we can control the alpha using the alphaMap Property, Dont forget transparent = true
+
+//NOW THE DOOR IS VISIBLE AND ALL THE EXTRA PLANE IS NOT VISIBLE. WE ARE SEEING VERY REALISTIC DOOR.
+material.transparent = true;
+material.alphaMap = doorAlphaTexture;
+
+// --------------------XXXXXXXXXXXXXXXXXXXXXX-MESH STANDARD MATERIAL COMPLETED -XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX------------------------------
+
 // -------------------------------------------------------------------------
 // 1st mesh
 const sphere = new THREE.Mesh(
