@@ -1,6 +1,12 @@
 import "./style.css";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
+import * as dat from "dat.gui";
+import { MaterialLoader } from "three";
+
+// Add debug control
+
+const gui = new dat.GUI();
 
 /**
  * Base
@@ -132,8 +138,8 @@ Side lets you decide which side of a face is visible
 
 // material.side = THREE.FrontSide;
 // material.side = THREE.BackSide;
-// Try not to use double Size cause its more calculation for the GPU and the computer.
 // material.side = THREE.DoubleSide;
+// Try not to use double Size cause its more calculation for the GPU and the computer.
 
 // Some of these propeties like wireframe or opacity can be used with other types of materials.
 
@@ -239,39 +245,110 @@ If you want cartoonish, use it.
 
 */
 
-const material = new THREE.MeshToonMaterial();
-material.gradientMap = gradientTexture;
+// const material = new THREE.MeshToonMaterial();
+// material.gradientMap = gradientTexture;
 
 // We see a gradient instead of a clear separation because the gradient is small and the magfilter tries to fix it with the mipmapping. Set the minFilter and magFilter to Three.nearestFilter, We can also deactivate the mipmapping. 'gradie'
 
-gradientTexture.minFilter = THREE.NearestFilter;
-gradientTexture.magFilter = THREE.NearestFilter;
+// gradientTexture.minFilter = THREE.NearestFilter;
+// gradientTexture.magFilter = THREE.NearestFilter;
 
 /*As we are using nearest filter so deactivate the generate mip maps, Its always better to deactivate them if we can. */
-gradientTexture.generateMipmaps = false;
+// gradientTexture.generateMipmaps = false;
 
 // try more gradient we have in gradients folder.
 // const gradientTexture = textureLoader.load("/textures/gradients/5.jpg");
 
 // -------------------------------------------------------------------------
+// ---------------------------------MESH STANDARD MATERIAL------------------------------------------
 
+const material = new THREE.MeshStandardMaterial();
+
+/*
+It uses physically based rendering principles (PBR) Like MeshLambertMaterial and MeshPhongMaterial, It supports lights but with a more realistic algorithm and better parameters like roughness and metalness.
+*/
+
+// We can change the roughness and the metalness.
+// material.metalness = 0.45;
+// material.roughness = 0.65;
+material.side = THREE.DoubleSide;
+
+// map allows you apply a texture
+material.map = doorColorTexture;
+
+// aoMap ("ambient occlusion map") will add shadows where the texture is dark. We must add a second set of UV named uv2 to use this feature.
+material.aoMap = doorAmbientOcclusionTexture;
+
+// Add the aomap with the doorAmbientOcculsionTexture texture and control the instensity with aoMapIntensity
+material.aoMapIntensity = 1;
+gui.add(material, "aoMapIntensity").min(0).max(5).step(0.0001);
+
+// DisplacementMap will move the vertices to create relief
+// height map and displacement map are the same.
+material.displacementMap = doorHeightTexture;
+material.displacementScale = 0.09;
+gui.add(material, "displacementScale").min(0).max(1).step(0.0001);
+
+/*
+It should look terrible because it lacks vertices and the displacement is way too strong.
+*/
+
+// Instead of specifying uniform, matalness and roughness for the whole geometry, we can use metalnessMap and roughnessMap
+// When its black it goes up and when white it goes down.
+
+material.metalnessMap = doorMetalnessTexture;
+material.roughnessMap = doorRoughnessTexture;
+
+// The reflection looks weird because the metalness and roughness properties still affect each map respectively, comment metalness and roughness or use their original values.
+material.metalness = 0;
+material.roughness = 1;
+
+// material.wireframe = true;
+
+// gui.add(material, "metalness", 0.1, 1);
+// gui.add(material, "roughness", 0.1, 1);
+gui.add(material, "metalness").min(0).max(1).step(0.0001);
+gui.add(material, "roughness").min(0).max(1).step(0.0001);
+
+// -------------------------------------------------------------------------
 // 1st mesh
 const sphere = new THREE.Mesh(
-  new THREE.SphereBufferGeometry(0.5, 16, 16),
+  new THREE.SphereBufferGeometry(0.5, 64, 64),
+  material
+);
+sphere.geometry.setAttribute(
+  "uv2",
+  new THREE.BufferAttribute(sphere.geometry.attributes.uv.array, 2)
+);
+
+const plane = new THREE.Mesh(
+  new THREE.PlaneBufferGeometry(1, 1, 100, 100),
   material
 );
 
-const plane = new THREE.Mesh(new THREE.PlaneBufferGeometry(1, 1), material);
-plane.position.x = -1.2;
+// AMBIENT OCCULSIONS
+// console.log(plane.geometry.attributes.uv.array);
+// To add a new attribute to geometry
+// Three js need uv2 coordinates in order to place the ambient occulsions on the texture. Cause uv coordinates has to go 2*2
+plane.geometry.setAttribute(
+  "uv2",
+  new THREE.BufferAttribute(plane.geometry.attributes.uv.array, 2)
+);
+
+plane.position.x = -2.5;
 
 const torus = new THREE.Mesh(
-  new THREE.TorusBufferGeometry(0.3, 0.2, 16, 32),
+  new THREE.TorusBufferGeometry(0.3, 0.2, 64, 128),
   material
 );
-torus.position.x = +1.2;
+torus.position.x = +2.5;
+torus.geometry.setAttribute(
+  "uv2",
+  new THREE.BufferAttribute(torus.geometry.attributes.uv.array, 2)
+);
 
 // We can add multiple mesh at one code, instead of adding it separately.
-scene.add(sphere, plane, torus);
+scene.add(torus, plane, sphere);
 
 /* As we made all the mesh using the same material so, If i want to change all the meshes color, i can do that in go, In material code itself 
 const material = new THREE.MeshBasicMaterial({color:'pink'});
@@ -346,11 +423,11 @@ const tick = () => {
   */
 
   sphere.rotation.y = 0.1 * elapsedTime;
-  plane.rotation.y = 0.1 * elapsedTime;
+  // plane.rotation.y = 0.1 * elapsedTime;
   torus.rotation.y = 0.1 * elapsedTime;
 
   sphere.rotation.x = 0.15 * elapsedTime;
-  plane.rotation.x = 0.15 * elapsedTime;
+  // plane.rotation.x = 0.15 * elapsedTime;
   torus.rotation.x = 0.15 * elapsedTime;
 
   // YOU dont need to rotate on z axis, because rotating in and x and y is already showing all possible rotation.
